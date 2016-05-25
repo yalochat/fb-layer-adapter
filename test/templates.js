@@ -30,13 +30,16 @@ describe('Get template library', () => {
         })
     })
 
-    it('Load a specific invalid template', (done) => {
+    it('Load a specific invalid template focus', (done) => {
 
-        const result = Templates.getTemplate('test')
-        console.log(result)
-        expect(result).to.be.null()
-        done()
-        
+        try{
+            const result = Templates.getTemplate('test')
+            done()
+        }
+        catch(e){
+            expect(e.message).to.match(/templates/i)
+            done()
+        }
     })
 
     it('Load all templates', (done) => {
@@ -49,7 +52,7 @@ describe('Get template library', () => {
         })
     })
 
-    it('Apply a template focus', (done) => {
+    it('Apply a template', (done) => {
 
         const result = Templates.loadTemplates()
         result.then((templates) => {

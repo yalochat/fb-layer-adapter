@@ -2,64 +2,44 @@
 
 // Load modules
 
+const Adapter = require('../lib/')
+const Vcr = require('vcrecorder')
 const Code = require('code')
 const Lab = require('lab')
-const Messenger = require('../lib')
-const Vcr = require('vcrecorder')
 
-
+var internals = {}
 // Test shortcuts
 
 const lab = exports.lab = Lab.script()
 const describe = lab.describe
 const expect = Code.expect
 const it = lab.test
+const beforeEach = lab.beforeEach
 
+describe('Index module', () => {
 
-describe('Messenger module', () => {
+    it('loads messenger plugin', (done) => {
+        const messenger = new Adapter.Messenger({'token':'9dkd9dkd9d'})
+        messenger.then((messengerObject ) => {
 
-    it('Load plugin without token', (done) => {
-        try{
-            messenger = new Messenger({})
-        }
-        catch(e){
-            expect(e.message).to.match(/token/i)
+            expect(messengerObject).to.be.instanceof(Messenger)
             done()
-        }
+
+        }, (e) => {
+            console.error(e)
+        })
     })
 
-    it('Load plugin without token', (done) => {
-        try{
-            const messenger = new Messenger({'token':'9dkd9dkd9d'})
-            expect(messenger).to.be.instanceof(Messenger)
+    it('loads layer plugin', (done) => {
+        const messenger = new Adapter.Layer({'token':'9dkd9dkd9d', appId:'83883'})
+        messenger.then((messengerObject ) => {
+
+            expect(messengerObject).to.be.instanceof(Layer)
             done()
-        }
-        catch(e){ }
-    })
 
-    it('Send text message focus', (done) => {
-
-        Vcr.insert('send-text-msg')
-        try{
-
-            const promise = new Messenger({'token':'EAAAAQEEIZCjIBAOMqsyq8oZC8NU5vyaZBw5YDmy444Tc0kCTRzHZCPjxt6T0OAlXMoU8X6d1tv8sjlfZBtZBPZA80OtKn8ZCgSgFSF6eVGybpxRVOnriiq4D1XixWMerZBDm7xXOvOAozGE7q2IMtGLZBVTRZBL8SJNOZA1V4BycnLZBTewZDZD'})
-
-            promise.then((messenger) => {
-                messenger.sendText('1031879416899272','hello', null).then((response) => {
-
-                    expect(response).to.be.an.object()
-                    expect(response.recipient_id).to.be.string()
-                    Vcr.eject((rec) =>  {
-                        done()
-                    })
-                })
-            })
-
-        }
-        catch(e){
-            console.log(e.message)
-            done()
-        }
+        }, (e) => {
+            console.error(e)
+        })
     })
 
 })
