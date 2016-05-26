@@ -184,7 +184,30 @@ describe('Messenger module', () => {
         }
         catch(e){
             console.log(e.message)
-            done()
+        }
+    })
+
+
+    it('get user', (done) => {
+
+        Vcr.insert('get-user-profile')
+        try{
+
+            const promise = new Messenger({'token':'EAAX6tDZBef9YBAF7MRhcYgPqFLswMAgDFCfce5ciiQHmAZBas3ZCIoT88OC1EovO22ZCBsdWSeTAmVVLNhoLIx3KxZC3lZAZC95cuZCyZChjkWMwin5KIWUYGpWsthRJrJLsku0vZBAbDRljO8x4H6zYa9AfXbnJfQXZAvIFsX1Abp10gZDZ'})
+
+            promise.then((messenger) => {
+
+                return messenger.getUser('979330562174845')
+            }).then((response) =>{
+
+                expect(response.gender).to.equals('male')
+                Vcr.eject((rec) =>  {
+                    done()
+                })
+            })
+        }
+        catch(e){
+            console.log(e.message)
         }
     })
 

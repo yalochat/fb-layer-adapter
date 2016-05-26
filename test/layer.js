@@ -131,12 +131,12 @@ describe('Layer module', () => {
         }
     })
 
-    it('send message', (done) => {
+    it('send message focus', (done) => {
 
         const layer = new Layer({token:'7R3ESPh1NGHciYiGladYRaBPlxWLTqeS2n8PlszSVR1TMN7F', appId: 'bec9d548-6265-11e5-9a48-0edffe00788f'})
 
         layer.then((layerInstance) => {
-            return layerInstance.sendText('fred@yalochat.com', 'hola mundo')
+            return layerInstance.sendText('979330562174845', 'hola mundo')
         }).then((result) => {
 
             expect(result.id).to.exist()
