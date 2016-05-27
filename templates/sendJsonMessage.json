@@ -1,0 +1,6 @@
+{
+    "recipient":{
+        "id": "{{ message.recipient }}"
+    }, 
+    "message": "{{ message.body }}"
+}
