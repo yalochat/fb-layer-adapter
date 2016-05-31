@@ -74,6 +74,28 @@ describe('Get template library', () => {
         })
     })
 
+    it('Apply create conversation template', (done) => {
+
+        const result = Templates.loadTemplates()
+        result.then((templates) => {
+            console.info(templates)
+
+
+            const data = {
+                message:{
+                    recipient:'452213211',
+                    text:'hola mundo'
+                }
+            }
+            const payload = Templates.applyTemplate('sendText', data)
+            console.log(payload)
+            //expect(payload).to.be.equals('')
+            expect(payload.message.text).to.equals('hola mundo')
+
+            done()
+        })
+    })
+
 
 
 })
