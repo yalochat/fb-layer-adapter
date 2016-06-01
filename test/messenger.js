@@ -119,7 +119,7 @@ describe('Messenger module', () => {
     Vcr.insert('send-text-msg')
 
     try {
-      const promise = new Messenger({'token':'EAAX6tDZBef9YBAF7MRhcYgPqFLswMAgDFCfce5ciiQHmAZBas3ZCIoT88OC1EovO22ZCBsdWSeTAmVVLNhoLIx3KxZC3lZAZC95cuZCyZChjkWMwin5KIWUYGpWsthRJrJLsku0vZBAbDRljO8x4H6zYa9AfXbnJfQXZAvIFsX1Abp10gZDZD'})
+      const promise = new Messenger({'token':internals.testTokenFacebook})
 
       promise.then((messenger) => {
         messenger.sendMessage('979330562174845', 'hello world', null).then((response) => {
@@ -141,7 +141,7 @@ describe('Messenger module', () => {
     Vcr.insert('send-json-msg')
 
     try {
-      let promise = new Messenger({'token':'EAAX6tDZBef9YBAF7MRhcYgPqFLswMAgDFCfce5ciiQHmAZBas3ZCIoT88OC1EovO22ZCBsdWSeTAmVVLNhoLIx3KxZC3lZAZC95cuZCyZChjkWMwin5KIWUYGpWsthRJrJLsku0vZBAbDRljO8x4H6zYa9AfXbnJfQXZAvIFsX1Abp10gZDZD'})
+      let promise = new Messenger({'token':internals.testTokenFacebook})
 
       promise.then((messenger) => {
         messenger.sendMessage('979330562174845', '{"attachment":{"type":"image","payload":{"url": "https://node-os.com/images/nodejs.png"}}}', null).then((response) => {
@@ -161,7 +161,7 @@ describe('Messenger module', () => {
 
   it('unable to find conversation from hook', (done) =>{
 
-    const promise = new Messenger({'token': 'EAAX6tDZBef9YBAF7MRhcYgPqFLswMAgDFCfce5ciiQHmAZBas3ZCIoT88OC1EovO22ZCBsdWSeTAmVVLNhoLIx3KxZC3lZAZC95cuZCyZChjkWMwin5KIWUYGpWsthRJrJLsku0vZBAbDRljO8x4H6zYa9AfXbnJfQXZAvIFsX1Abp10gZDZD'})
+    const promise = new Messenger({'token': internals.testTokenFacebook})
 
     promise.then((messenger) => {
 
