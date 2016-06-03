@@ -119,7 +119,7 @@ describe('Messenger module', () => {
     Vcr.insert('send-text-msg')
 
     try {
-      const promise = new Messenger({'token':'EAAX6tDZBef9YBAF7MRhcYgPqFLswMAgDFCfce5ciiQHmAZBas3ZCIoT88OC1EovO22ZCBsdWSeTAmVVLNhoLIx3KxZC3lZAZC95cuZCyZChjkWMwin5KIWUYGpWsthRJrJLsku0vZBAbDRljO8x4H6zYa9AfXbnJfQXZAvIFsX1Abp10gZDZD'})
+      const promise = new Messenger({'token':internals.testTokenFacebook})
 
       promise.then((messenger) => {
         messenger.sendMessage('979330562174845', 'hello world', null).then((response) => {
@@ -141,7 +141,7 @@ describe('Messenger module', () => {
     Vcr.insert('send-json-msg')
 
     try {
-      let promise = new Messenger({'token':'EAAX6tDZBef9YBAF7MRhcYgPqFLswMAgDFCfce5ciiQHmAZBas3ZCIoT88OC1EovO22ZCBsdWSeTAmVVLNhoLIx3KxZC3lZAZC95cuZCyZChjkWMwin5KIWUYGpWsthRJrJLsku0vZBAbDRljO8x4H6zYa9AfXbnJfQXZAvIFsX1Abp10gZDZD'})
+      let promise = new Messenger({'token':internals.testTokenFacebook})
 
       promise.then((messenger) => {
         messenger.sendMessage('979330562174845', '{"attachment":{"type":"image","payload":{"url": "https://node-os.com/images/nodejs.png"}}}', null).then((response) => {
@@ -161,26 +161,26 @@ describe('Messenger module', () => {
 
   it('unable to find conversation from hook', (done) =>{
 
-    const promise = new Messenger({'token': 'EAAX6tDZBef9YBAF7MRhcYgPqFLswMAgDFCfce5ciiQHmAZBas3ZCIoT88OC1EovO22ZCBsdWSeTAmVVLNhoLIx3KxZC3lZAZC95cuZCyZChjkWMwin5KIWUYGpWsthRJrJLsku0vZBAbDRljO8x4H6zYa9AfXbnJfQXZAvIFsX1Abp10gZDZD'})
+    const promise = new Messenger({'token': internals.testTokenFacebook})
 
     promise.then((messenger) => {
 
       try{
+        internals.hook.message.conversation.id = null
         const msg = messenger.sendTextFromHook(internals.hook)
 
         msg.catch(error => {
           expect(error).to.be.error()
-          expect(error.message).to.match(/Unable to find stored conversation, message could not be send/i)
+          expect(error.message).to.match(/Unable to find conversation, message could not be send/i)
           done()
         })
-      }
-      catch(e){
+      } catch(e) {
         Logger.error(e)
       }
     })
   })
 
-  it('ignore own message, focus', (done) =>{
+  it('ignore own message from hook', (done) =>{
 
     const promise = new Messenger({'token': internals.testTokenFacebook})
 
@@ -192,7 +192,7 @@ describe('Messenger module', () => {
 
         msg.catch(error => {
           expect(error).to.be.error()
-          expect(error.message).to.match(/Ignoring message from service.yalochat/i)
+          expect(error.message).to.equals(`Ignoring message from ${internals.hook.message.sender.user_id}`)
           done()
         })
       }
@@ -228,7 +228,6 @@ describe('Messenger module', () => {
       Logger.error(e.message)
     }
   })
-
 
   it('get user', (done) => {
 
