@@ -59,7 +59,7 @@ describe('Cache module', () => {
 
                 expect(status).to.be.true()
                 client.storeGet(key).then((value) => {
-                    expect(value.item).to.equals('123')
+                    expect(value).to.equals('123')
                     done()
                 })
 
@@ -70,14 +70,15 @@ describe('Cache module', () => {
         })
     })
 
-    it('get an invalid key', (done) => {
+    it('get an invalid key, focus', (done) => {
 
         const cache = new Cache()
 
         cache.then((client) => {
 
-            const key = { id: 'x', segment: 'test' };
-            client.storeGet(key).then((value) => {
+            const key = { id: 'y', segment: 'test' };
+            client.storeGet(key)
+              .catch((value) => {
                 expect(value).to.be.null()
                 done()
             })
