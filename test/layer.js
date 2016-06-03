@@ -77,8 +77,6 @@ describe('Layer module', () => {
         }
       ]
     }
-
-
     internals.messengerInvalidHook = {
       "object":"page",
       "entry":[
@@ -153,7 +151,7 @@ describe('Layer module', () => {
   })
 
 
-  it('send message', (done) => {
+  it('send message, focus', (done) => {
 
     Vcr.insert('layer-send-text-msg')
     const layer = new Layer({token:'7R3ESPh1NGHciYiGladYRaBPlxWLTqeS2n8PlszSVR1TMN7F', appId: 'bec9d548-6265-11e5-9a48-0edffe00788f', sender: {id: 'test.bot', name: 'Fred'}})
