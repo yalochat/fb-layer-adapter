@@ -109,7 +109,6 @@ describe('Layer module', () => {
   it('load plugin without token', (done) => {
 
     new Layer({}).catch((e) => {
-      console.info(e.message)
       expect(e.message).to.match(/layer/i)
       done()
 
@@ -120,7 +119,6 @@ describe('Layer module', () => {
 
     const layer = new Layer({token:'7R3ESPh1NGHciYiGladYRaBPlxWLTqeS2n8PlszSVR1TMN7F', appId: 'bec9d548-6265-11e5-9a48-0edffe00788f'})
     layer.catch((e) => {
-      console.error(e)
       expect(e.message).to.match(/sender/i)
       done()
     })
@@ -147,7 +145,7 @@ describe('Layer module', () => {
 
       expect(layerInstance).to.be.instanceof(Layer)
       done()
-    }).catch(done)
+    }, done)
   })
 
 
@@ -165,7 +163,7 @@ describe('Layer module', () => {
       Vcr.eject((rec) =>  {
         done()
       })
-    }).catch(done)
+    }, done)
   })
 
   it('send invalid message from hook', (done) => {
@@ -182,7 +180,7 @@ describe('Layer module', () => {
       expect(result).to.be.empty()
       done()
 
-    }).catch(done)
+    }, done)
   })
 
   it('send invalid message item from hook', (done) => {
@@ -199,7 +197,7 @@ describe('Layer module', () => {
       expect(result).to.be.empty()
       done()
 
-    }).catch(done)
+    }, done)
   })
 
 
@@ -219,7 +217,7 @@ describe('Layer module', () => {
         done()
       })
 
-    }).catch(done)
+    }, done)
   })
 
   it('send message from hook', (done) => {
@@ -262,6 +260,6 @@ describe('Layer module', () => {
         done()
       })
 
-    }).catch(done)
+    }, done)
   })
 })
