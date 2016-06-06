@@ -20,7 +20,7 @@ describe('Cache module', () => {
 
     it('load class constructor', (done) => {
 
-        const cache = new Cache()
+      const cache = new Cache({})
         cache.then((cacheInstance) => {
 
             expect(cacheInstance).to.be.instanceof(Cache)
@@ -30,7 +30,7 @@ describe('Cache module', () => {
 
     it('store a key', (done) => {
 
-        const cache = new Cache()
+      const cache = new Cache({})
 
         cache.then((client) => {
 
@@ -49,7 +49,7 @@ describe('Cache module', () => {
 
     it('store and get a key', (done) => {
 
-        const cache = new Cache()
+      const cache = new Cache({})
 
         cache.then((client) => {
 
@@ -72,7 +72,7 @@ describe('Cache module', () => {
 
     it('get an invalid key, focus', (done) => {
 
-        const cache = new Cache()
+      const cache = new Cache({})
 
         cache.then((client) => {
 

@@ -109,10 +109,11 @@ describe('Layer module', () => {
   it('load plugin without token', (done) => {
 
     new Layer({}).catch((e) => {
-      console.info(e.message)
       expect(e.message).to.match(/layer/i)
       done()
 
+    }).then( _ => {
+      done()
     })
   })
 
@@ -120,8 +121,9 @@ describe('Layer module', () => {
 
     const layer = new Layer({token:'7R3ESPh1NGHciYiGladYRaBPlxWLTqeS2n8PlszSVR1TMN7F', appId: 'bec9d548-6265-11e5-9a48-0edffe00788f'})
     layer.catch((e) => {
-      console.error(e)
       expect(e.message).to.match(/sender/i)
+      done()
+    }).then( _ => {
       done()
     })
   })
@@ -139,6 +141,42 @@ describe('Layer module', () => {
     })
   })
 
+  it('load plugin with recipients', (done) => {
+
+    const layer = new Layer({token:'7R3ESPh1NGHciYiGladYRaBPlxWLTqeS2n8PlszSVR1TMN7F', appId: 'bec9d548-6265-11e5-9a48-0edffe00788f', participants: ['loosers.mx', 'loosers.bot']})
+
+    layer.then( Layer => {
+
+      expect(Layer.config.participants).to.be.an.array()
+      expect(Layer.config.participants).to.include('service.yalochat')
+      done()
+    }).catch(done)
+  })
+
+  it('load plugin with recipients and sender', (done) => {
+
+    const layer = new Layer({token:'7R3ESPh1NGHciYiGladYRaBPlxWLTqeS2n8PlszSVR1TMN7F', appId: 'bec9d548-6265-11e5-9a48-0edffe00788f', participants: ['loosers.mx'], sender: {id: 'loosers.bot', name: 'Fred'}})
+
+    layer.then( Layer => {
+
+      expect(Layer.config.participants).to.be.an.array()
+      expect(Layer.config.participants).to.include('loosers.bot')
+      done()
+    }).catch(done)
+  })
+
+  it('load plugin with recipients and sender', (done) => {
+
+    const layer = new Layer({token:'7R3ESPh1NGHciYiGladYRaBPlxWLTqeS2n8PlszSVR1TMN7F', appId: 'bec9d548-6265-11e5-9a48-0edffe00788f', participants: ['loosers.mx'], sender: {name: 'Fred'}})
+
+    layer.then( Layer => {
+
+      expect(Layer.config.participants).to.be.an.array()
+      expect(Layer.config.participants).to.not.include('loosers.bot')
+      done()
+    }).catch(done)
+  })
+
   it('load plugin with token', (done) => {
 
     const layer = new Layer({token:'7R3ESPh1NGHciYiGladYRaBPlxWLTqeS2n8PlszSVR1TMN7F', appId: 'bec9d548-6265-11e5-9a48-0edffe00788f', sender: {id: '123', name: 'Fred'}})
@@ -151,7 +189,7 @@ describe('Layer module', () => {
   })
 
 
-  it('send message, focus', (done) => {
+  it('send message focus', (done) => {
 
     Vcr.insert('layer-send-text-msg')
     const layer = new Layer({token:'7R3ESPh1NGHciYiGladYRaBPlxWLTqeS2n8PlszSVR1TMN7F', appId: 'bec9d548-6265-11e5-9a48-0edffe00788f', sender: {id: 'test.bot', name: 'Fred'}})
