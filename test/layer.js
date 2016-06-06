@@ -137,6 +137,42 @@ describe('Layer module', () => {
     })
   })
 
+  it('load plugin with recipients', (done) => {
+
+    const layer = new Layer({token:'7R3ESPh1NGHciYiGladYRaBPlxWLTqeS2n8PlszSVR1TMN7F', appId: 'bec9d548-6265-11e5-9a48-0edffe00788f', participants: ['loosers.mx', 'loosers.bot']})
+
+    layer.then( Layer => {
+
+      expect(Layer.config.participants).to.be.an.array()
+      expect(Layer.config.participants).to.include('service.yalochat')
+      done()
+    }).catch(done)
+  })
+
+  it('load plugin with recipients and sender', (done) => {
+
+    const layer = new Layer({token:'7R3ESPh1NGHciYiGladYRaBPlxWLTqeS2n8PlszSVR1TMN7F', appId: 'bec9d548-6265-11e5-9a48-0edffe00788f', participants: ['loosers.mx'], sender: {id: 'loosers.bot', name: 'Fred'}})
+
+    layer.then( Layer => {
+
+      expect(Layer.config.participants).to.be.an.array()
+      expect(Layer.config.participants).to.include('loosers.bot')
+      done()
+    }).catch(done)
+  })
+
+  it('load plugin with recipients and sender focus', (done) => {
+
+    const layer = new Layer({token:'7R3ESPh1NGHciYiGladYRaBPlxWLTqeS2n8PlszSVR1TMN7F', appId: 'bec9d548-6265-11e5-9a48-0edffe00788f', participants: ['loosers.mx'], sender: {name: 'Fred'}})
+
+    layer.then( Layer => {
+
+      expect(Layer.config.participants).to.be.an.array()
+      expect(Layer.config.participants).to.not.include('loosers.bot')
+      done()
+    }).catch(done)
+  })
+
   it('load plugin with token', (done) => {
 
     const layer = new Layer({token:'7R3ESPh1NGHciYiGladYRaBPlxWLTqeS2n8PlszSVR1TMN7F', appId: 'bec9d548-6265-11e5-9a48-0edffe00788f', sender: {id: '123', name: 'Fred'}})
@@ -149,7 +185,7 @@ describe('Layer module', () => {
   })
 
 
-  it('send message, focus', (done) => {
+  it('send message', (done) => {
 
     Vcr.insert('layer-send-text-msg')
     const layer = new Layer({token:'7R3ESPh1NGHciYiGladYRaBPlxWLTqeS2n8PlszSVR1TMN7F', appId: 'bec9d548-6265-11e5-9a48-0edffe00788f', sender: {id: 'test.bot', name: 'Fred'}})
