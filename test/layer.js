@@ -112,6 +112,8 @@ describe('Layer module', () => {
       expect(e.message).to.match(/layer/i)
       done()
 
+    }).then( _ => {
+      done()
     })
   })
 
@@ -120,6 +122,8 @@ describe('Layer module', () => {
     const layer = new Layer({token:'7R3ESPh1NGHciYiGladYRaBPlxWLTqeS2n8PlszSVR1TMN7F', appId: 'bec9d548-6265-11e5-9a48-0edffe00788f'})
     layer.catch((e) => {
       expect(e.message).to.match(/sender/i)
+      done()
+    }).then( _ => {
       done()
     })
   })
