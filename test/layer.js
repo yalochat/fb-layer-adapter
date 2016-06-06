@@ -161,7 +161,7 @@ describe('Layer module', () => {
     }).catch(done)
   })
 
-  it('load plugin with recipients and sender focus', (done) => {
+  it('load plugin with recipients and sender', (done) => {
 
     const layer = new Layer({token:'7R3ESPh1NGHciYiGladYRaBPlxWLTqeS2n8PlszSVR1TMN7F', appId: 'bec9d548-6265-11e5-9a48-0edffe00788f', participants: ['loosers.mx'], sender: {name: 'Fred'}})
 
@@ -181,11 +181,11 @@ describe('Layer module', () => {
 
       expect(layerInstance).to.be.instanceof(Layer)
       done()
-    }, done)
+    }).catch(done)
   })
 
 
-  it('send message', (done) => {
+  it('send message focus', (done) => {
 
     Vcr.insert('layer-send-text-msg')
     const layer = new Layer({token:'7R3ESPh1NGHciYiGladYRaBPlxWLTqeS2n8PlszSVR1TMN7F', appId: 'bec9d548-6265-11e5-9a48-0edffe00788f', sender: {id: 'test.bot', name: 'Fred'}})
@@ -199,7 +199,7 @@ describe('Layer module', () => {
       Vcr.eject((rec) =>  {
         done()
       })
-    }, done)
+    }).catch(done)
   })
 
   it('send invalid message from hook', (done) => {
@@ -216,7 +216,7 @@ describe('Layer module', () => {
       expect(result).to.be.empty()
       done()
 
-    }, done)
+    }).catch(done)
   })
 
   it('send invalid message item from hook', (done) => {
@@ -233,7 +233,7 @@ describe('Layer module', () => {
       expect(result).to.be.empty()
       done()
 
-    }, done)
+    }).catch(done)
   })
 
 
@@ -253,7 +253,7 @@ describe('Layer module', () => {
         done()
       })
 
-    }, done)
+    }).catch(done)
   })
 
   it('send message from hook', (done) => {
@@ -296,6 +296,6 @@ describe('Layer module', () => {
         done()
       })
 
-    }, done)
+    }).catch(done)
   })
 })
