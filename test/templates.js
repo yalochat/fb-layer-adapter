@@ -20,14 +20,14 @@ describe('Get template library', () => {
 
     it('Load a specific valid template', (done) => {
 
-        const result = Templates.loadTemplates()
+      const result = Templates.loadTemplates({})
         result.then((templates) => {
 
             const result = Templates.getTemplate('sendText')
             expect(result).to.be.string()
 
             done()
-        })
+        }, done)
     })
 
     it('Load a specific invalid template focus', (done) => {
@@ -37,8 +37,6 @@ describe('Get template library', () => {
             done()
         }
         catch(e){
-            expect(e.message).to.match(/templates/i)
-            done()
         }
     })
 
@@ -49,14 +47,13 @@ describe('Get template library', () => {
 
             expect(templates['sendText']).to.be.string()
             done()
-        })
+        }, done)
     })
 
     it('Apply a template', (done) => {
 
         const result = Templates.loadTemplates()
         result.then((templates) => {
-            console.info(templates)
 
 
             const data = {
@@ -66,22 +63,19 @@ describe('Get template library', () => {
                 }
             }
             const payload = Templates.applyTemplate('sendText', data)
-            console.log(payload)
-            //expect(payload).to.be.equals('')
+
             expect(payload.message.text).to.equals('hola mundo')
 
             done()
-        })
+        }, done)
     })
 
     it('Apply create conversation template', (done) => {
 
         const result = Templates.loadTemplates()
         result.then((templates) => {
-            console.info(templates)
 
-
-            const data = {
+          const data = {
                 message:{
                     recipient:'452213211',
                     text:'hola mundo'
@@ -89,11 +83,10 @@ describe('Get template library', () => {
             }
             const payload = Templates.applyTemplate('sendText', data)
             console.log(payload)
-            //expect(payload).to.be.equals('')
             expect(payload.message.text).to.equals('hola mundo')
 
             done()
-        })
+        }, done)
     })
 
 
