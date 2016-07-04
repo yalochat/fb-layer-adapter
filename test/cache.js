@@ -1,12 +1,12 @@
 'use strict'
 
 // Load modules
-
-const Cache = require('../lib/cache')
-
 const Code = require('code')
 const Lab = require('lab')
+const Promise = require('bluebird')
+const Catbox = require('catbox')
 
+const Cache = require('../lib/cache')
 
 // Test shortcuts
 
@@ -21,10 +21,24 @@ describe('Cache module', () => {
     it('load class constructor', (done) => {
 
       const cache = new Cache({})
-        cache.then((cacheInstance) => {
+      cache.then((cacheInstance) => {
 
-            expect(cacheInstance).to.be.instanceof(Cache)
-            done()
+        expect(cacheInstance).to.be.instanceof(Cache)
+        done()
+      })
+    })
+
+    it('error when trying to init the client', (done) => {
+      const start = Catbox.Client.prototype.start
+      Catbox.Client.prototype.start = (callback) => {
+        callback(new Error())
+      }
+
+      new Cache({})
+        .catch((error) => {
+          expect(error).to.be.instanceof(Error)
+          Catbox.Client.prototype.start = start
+          done()
         })
     })
 
@@ -32,18 +46,39 @@ describe('Cache module', () => {
 
       const cache = new Cache({})
 
-        cache.then((client) => {
+      cache.then((client) => {
 
-            const key = { id: 'x', segment: 'test' };
-            const response = client.storeSet(key, '123')
-            response.then((status) => {
+        const key = { id: 'x', segment: 'test' };
+        const response = client.storeSet(key, '123')
+        response.then((status) => {
 
-                expect(status).to.be.true()
-                done()
-            }).catch((err) => {
-                console.error(err)
+            expect(status).to.be.true()
+            done()
+        }).catch((err) => {
+            console.error(err)
+        })
+
+      })
+    })
+
+    it('error when trying to set a key', (done) => {
+      const set = Catbox.Client.prototype.set
+      Catbox.Client.prototype.set = (key, value, ttl, callback) => {
+          return callback(new Error('fail'));
+      }
+
+
+      new Cache({})
+        .then((client) => {
+          const key = { id: 'x', segment: 'test' };
+          
+          client.storeSet(key, '123')
+            .catch((err) => {
+          
+              expect(err).to.be.instanceof(Error)
+              Catbox.Client.prototype.set = set
+              done()
             })
-
         })
     })
 
@@ -70,18 +105,39 @@ describe('Cache module', () => {
         })
     })
 
-    it('get an invalid key, focus', (done) => {
+    it('get an invalid key', (done) => {
 
-      const cache = new Cache({})
+      new Cache({})
+        .then((client) => {
 
-        cache.then((client) => {
+          const key = { id: 'y', segment: 'test' }
 
-            const key = { id: 'y', segment: 'test' };
-            client.storeGet(key)
-              .catch((value) => {
-                expect(value).to.be.null()
-                done()
-            })
+          client.storeGet(key)
+            .catch((value) => {
+              expect(value).to.be.null()
+              done()
+          })
+       })
+    })
+
+    it('error when trying to get a key', (done) => {
+      const get = Catbox.Client.prototype.get
+      Catbox.Client.prototype.get = (key, callback) => {
+          return callback(new Error('fail'), null);
+      }
+
+
+      new Cache({})
+        .then((client) => {
+          const key = { id: 'x', segment: 'test' }
+
+          client.storeGet(key)
+            .catch((value) => {
+
+              expect(value).to.be.instanceof(Error)
+              Catbox.Client.prototype.get = get
+              done()
+          })
         })
     })
 
