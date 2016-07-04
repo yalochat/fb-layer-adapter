@@ -34,4 +34,12 @@ describe('Config', () => {
     done()
   })
 
+  it('it gets config redis', (done) => {
+    expect(Config.get('/app/redis/host')).to.equals('127.0.0.1')
+    expect(Config.get('/app/redis/port')).to.equals('6379')
+    expect(Config.get('/app/redis/database')).to.equals('adapter-cache-test')
+
+    done()
+  })
+
 })
