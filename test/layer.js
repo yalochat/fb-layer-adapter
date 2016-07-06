@@ -112,13 +112,10 @@ describe('Layer module', () => {
 
     done()
   })
-  it('load plugin without token fred', (done) => {
+  it('load plugin without token', (done) => {
 
     new Layer({}).catch((e) => {
       expect(e.message).to.match(/layer/i)
-      done()
-
-    }).then( _ => {
       done()
     })
   })
@@ -208,7 +205,7 @@ describe('Layer module', () => {
       expect(result.sender.user_id).equals('test.bot')
       Vcr.eject((rec) =>  {
         done()
-      })
+      }).catch(done)
     }).catch(done)
   })
 
@@ -354,7 +351,7 @@ describe('Layer module', () => {
     }).catch(done)
   })
 
-    it('send message from hook without sender focus', (done) => {
+    it('send message from hook without sender', (done) => {
 
     let messengerPostbackHook = {
       'object':'page',

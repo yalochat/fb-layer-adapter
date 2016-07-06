@@ -98,8 +98,6 @@ describe('Messenger module', () => {
     new Messenger({}).catch((e) => {
       expect(e.message).to.match(/token/i)
       done()
-    }).then(() => {
-      done()
     })
   })
 
@@ -111,7 +109,7 @@ describe('Messenger module', () => {
       expect(messengerObject).to.be.instanceof(Messenger)
       done()
 
-    }, done)
+    }).catch(done)
   })
 
   it('sends text message', (done) => {
@@ -129,7 +127,7 @@ describe('Messenger module', () => {
       Vcr.eject((rec) =>  {
         done()
       })
-    }, done)
+    }).catch(done)
   })
 
   it('sends json message', (done) => {
@@ -146,7 +144,7 @@ describe('Messenger module', () => {
           done()
         })
       })
-    }, done)
+    }).catch(done)
   })
 
   it('unable to find conversation from hook', (done) =>{
@@ -163,7 +161,7 @@ describe('Messenger module', () => {
         expect(error.message).to.match(/Unable to find conversation, message could not be send/i)
         done()
       })
-    }, done)
+    }).catch(done)
   })
 
   it('ignore own message from hook', (done) =>{
@@ -175,13 +173,13 @@ describe('Messenger module', () => {
       internals.hook.message.sender.user_id = 'yoelfme'
       return messenger.sendTextFromHook(internals.hook)
 
-    }, done)
+    })
       .catch(error => {
 
         expect(error).to.be.error()
         expect(error.message).to.equals(`Ignoring message from ${internals.hook.message.sender.user_id}`)
         done()
-      }, done)
+      }).catch(done)
 
   })
 
@@ -202,8 +200,8 @@ describe('Messenger module', () => {
         Vcr.eject((rec) =>  {
           done()
         })
-      }, done)
-    }, done)
+      }).catch(done)
+    }).catch(done)
   })
 
   it('get user', (done) => {
@@ -221,6 +219,6 @@ describe('Messenger module', () => {
       Vcr.eject((rec) =>  {
         done()
       })
-    }, done)
+    }).catch(done)
   })
 })
