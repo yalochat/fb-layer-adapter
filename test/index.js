@@ -31,7 +31,7 @@ describe('Index module', () => {
     })
 
     it('loads layer plugin', (done) => {
-        const messenger = new Adapter.Layer({'token':'9dkd9dkd9d', appId:'83883'})
+        const messenger = new Adapter.Layer({'token':'9dkd9dkd9d', appId:'83883', sender: {}})
         messenger.then((messengerObject ) => {
 
             expect(messengerObject).to.be.instanceof(Layer)
