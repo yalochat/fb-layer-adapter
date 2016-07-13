@@ -3,10 +3,11 @@
 const Promise = require('bluebird')
 const LayerAPI = require('layer-api')
 const Logger = require('bucker').createLogger()
+const Config = require('../config')
 
 const Layer = new LayerAPI({
-  token: process.env.LAYER_TOKEN,
-  appId: process.env.LAYER_APP_ID
+  token: Config.get('/app/layer/token'),
+  appId: Config.get('/app/layer/appId')
 });
 
 const externals = {}
