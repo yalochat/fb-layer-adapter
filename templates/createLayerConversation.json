@@ -8,7 +8,7 @@
         "user": {
             "id": "{{ user.id }}",
             "nickname": "{{ user.first_name }}",
-            "name": "{{ user.first_name }} {{ user.last_name }}",
+            "name": "{{ user.full_name }}",
             "pic": "{{ user.profile_pic }}",
             "gender": "{{ user.gender }}"
         },
