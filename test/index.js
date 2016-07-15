@@ -18,28 +18,24 @@ const beforeEach = lab.beforeEach
 
 describe('Index module', () => {
 
-    it('loads messenger plugin', (done) => {
-        const messenger = new Adapter.Messenger({'token':'9dkd9dkd9d'})
-        messenger.then((messengerObject ) => {
+  it('loads messenger plugin', (done) => {
 
-            expect(messengerObject).to.be.instanceof(Messenger)
-            done()
+    new Adapter.Messenger({ token: 'ABC123'})
+      .then(messengerInstance => {
 
-        }, (e) => {
-            console.error(e)
-        })
+        expect(messengerInstance).to.be.instanceOf(Adapter.Messenger)
+        done()
+      })
     })
 
-    it('loads layer plugin', (done) => {
-        const messenger = new Adapter.Layer({'token':'9dkd9dkd9d', appId:'83883', sender: {}})
-        messenger.then((messengerObject ) => {
+  it('loads layer plugin', (done) => {
 
-            expect(messengerObject).to.be.instanceof(Layer)
-            done()
+    new Adapter.Layer({ token: 'ABC123', appId: '1234', sender: {}, messengerToken: 'CBA321'})
+      .then(layerInstance => {
 
-        }, (e) => {
-            console.error(e)
-        })
+        expect(layerInstance).to.be.instanceOf(Adapter.Layer)
+        done()
+      })
     })
 
 })
