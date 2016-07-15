@@ -93,12 +93,10 @@ describe('Messenger module', () => {
     done()
   })
 
-  it('Load plugin without token focus', (done) => {
+  it('Load plugin without token', (done) => {
 
     new Messenger({}).catch((e) => {
       expect(e.message).to.match(/token/i)
-      done()
-    }).then(() => {
       done()
     })
   })

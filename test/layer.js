@@ -16,7 +16,9 @@ const describe = lab.describe
 const expect = Code.expect
 const it = lab.test
 
-const internals = {}
+const internals = {
+  messengerToken: 'EAAX6tDZBef9YBAF7MRhcYgPqFLswMAgDFCfce5ciiQHmAZBas3ZCIoT88OC1EovO22ZCBsdWSeTAmVVLNhoLIx3KxZC3lZAZC95cuZCyZChjkWMwin5KIWUYGpWsthRJrJLsku0vZBAbDRljO8x4H6zYa9AfXbnJfQXZAvIFsX1Abp10gZDZ'
+}
 
 describe('Layer module', () => {
 
@@ -112,20 +114,18 @@ describe('Layer module', () => {
 
     done()
   })
-  it('load plugin without token fred', (done) => {
+  it('load plugin without token, focus', (done) => {
 
     new Layer({}).catch((e) => {
       expect(e.message).to.match(/layer/i)
       done()
 
-    }).then( _ => {
-      done()
     })
   })
 
   it('load plugin without sender', (done) => {
 
-    const layer = new Layer({token:'7R3ESPh1NGHciYiGladYRaBPlxWLTqeS2n8PlszSVR1TMN7F', appId: 'bec9d548-6265-11e5-9a48-0edffe00788f'})
+    const layer = new Layer({token:'7R3ESPh1NGHciYiGladYRaBPlxWLTqeS2n8PlszSVR1TMN7F', appId: 'bec9d548-6265-11e5-9a48-0edffe00788f', messengerToken: internals.messengerToken})
     layer.catch((e) => {
       expect(e.message).to.match(/sender/i)
       done()
@@ -149,7 +149,7 @@ describe('Layer module', () => {
 
   it('load plugin with recipients', (done) => {
 
-    const layer = new Layer({token:'7R3ESPh1NGHciYiGladYRaBPlxWLTqeS2n8PlszSVR1TMN7F', appId: 'bec9d548-6265-11e5-9a48-0edffe00788f', participants: ['loosers.mx', 'loosers.bot'], debug: internals.debug })
+    const layer = new Layer({token:'7R3ESPh1NGHciYiGladYRaBPlxWLTqeS2n8PlszSVR1TMN7F', appId: 'bec9d548-6265-11e5-9a48-0edffe00788f', participants: ['loosers.mx', 'loosers.bot'], debug: internals.debug, messengerToken: internals.messengerToken})
 
     layer.then( Layer => {
 
@@ -161,7 +161,7 @@ describe('Layer module', () => {
 
   it('load plugin with recipients and sender', (done) => {
 
-    const layer = new Layer({token:'7R3ESPh1NGHciYiGladYRaBPlxWLTqeS2n8PlszSVR1TMN7F', appId: 'bec9d548-6265-11e5-9a48-0edffe00788f', participants: ['loosers.mx'], sender: {id: 'loosers.bot', name: 'Fred'}, debug: internals.debug })
+    const layer = new Layer({token:'7R3ESPh1NGHciYiGladYRaBPlxWLTqeS2n8PlszSVR1TMN7F', appId: 'bec9d548-6265-11e5-9a48-0edffe00788f', participants: ['loosers.mx'], sender: {id: 'loosers.bot', name: 'Fred'}, debug: internals.debug, messengerToken: internals.messengerToken})
 
     layer.then( Layer => {
 
@@ -173,7 +173,7 @@ describe('Layer module', () => {
 
   it('load plugin with recipients and sender', (done) => {
 
-    const layer = new Layer({token:'7R3ESPh1NGHciYiGladYRaBPlxWLTqeS2n8PlszSVR1TMN7F', appId: 'bec9d548-6265-11e5-9a48-0edffe00788f', participants: ['loosers.mx'], sender: {name: 'Fred'}, debug: internals.debug })
+    const layer = new Layer({token:'7R3ESPh1NGHciYiGladYRaBPlxWLTqeS2n8PlszSVR1TMN7F', appId: 'bec9d548-6265-11e5-9a48-0edffe00788f', participants: ['loosers.mx'], sender: {name: 'Fred'}, debug: internals.debug, messengerToken: internals.messengerToken})
 
     layer.then( Layer => {
 
@@ -185,7 +185,7 @@ describe('Layer module', () => {
 
   it('load plugin with token', (done) => {
 
-    const layer = new Layer({token:'7R3ESPh1NGHciYiGladYRaBPlxWLTqeS2n8PlszSVR1TMN7F', appId: 'bec9d548-6265-11e5-9a48-0edffe00788f', sender: {id: '123', name: 'Fred'}, debug: internals.debug })
+    const layer = new Layer({token:'7R3ESPh1NGHciYiGladYRaBPlxWLTqeS2n8PlszSVR1TMN7F', appId: 'bec9d548-6265-11e5-9a48-0edffe00788f', sender: {id: '123', name: 'Fred'}, debug: internals.debug, messengerToken: internals.messengerToken})
 
     layer.then((layerInstance) => {
 
@@ -198,7 +198,7 @@ describe('Layer module', () => {
   it('send message', (done) => {
 
     Vcr.insert('layer-send-text-msg')
-    const layer = new Layer({token:'7R3ESPh1NGHciYiGladYRaBPlxWLTqeS2n8PlszSVR1TMN7F', appId: 'bec9d548-6265-11e5-9a48-0edffe00788f', sender: {id: 'test.bot', name: 'Fred'}, debug: internals.debug })
+    const layer = new Layer({token:'7R3ESPh1NGHciYiGladYRaBPlxWLTqeS2n8PlszSVR1TMN7F', appId: 'bec9d548-6265-11e5-9a48-0edffe00788f', sender: {id: 'test.bot', name: 'Fred'}, debug: internals.debug, messengerToken: internals.messengerToken})
 
     layer.then((layerInstance) => {
       return layerInstance.sendText('979330562174845', 'hola mundo')
@@ -214,7 +214,7 @@ describe('Layer module', () => {
 
   it('send invalid message from hook', (done) => {
 
-    const layer = new Layer({token:'7R3ESPh1NGHciYiGladYRaBPlxWLTqeS2n8PlszSVR1TMN7F', appId: 'bec9d548-6265-11e5-9a48-0edffe00788f', sender: {id: 'test.bot', name: 'Fred'}, debug: internals.debug })
+    const layer = new Layer({token:'7R3ESPh1NGHciYiGladYRaBPlxWLTqeS2n8PlszSVR1TMN7F', appId: 'bec9d548-6265-11e5-9a48-0edffe00788f', sender: {id: 'test.bot', name: 'Fred'}, debug: internals.debug, messengerToken: internals.messengerToken})
 
     layer.then((layerInstance) => {
 
@@ -231,7 +231,7 @@ describe('Layer module', () => {
 
   it('send invalid message item from hook', (done) => {
 
-    const layer = new Layer({token:'7R3ESPh1NGHciYiGladYRaBPlxWLTqeS2n8PlszSVR1TMN7F', appId: 'bec9d548-6265-11e5-9a48-0edffe00788f', sender: {id: 'test.bot', name: 'Fred'}, debug: internals.debug })
+    const layer = new Layer({token:'7R3ESPh1NGHciYiGladYRaBPlxWLTqeS2n8PlszSVR1TMN7F', appId: 'bec9d548-6265-11e5-9a48-0edffe00788f', sender: {id: 'test.bot', name: 'Fred'}, debug: internals.debug, messengerToken: internals.messengerToken })
 
     layer.then((layerInstance) => {
 
@@ -250,7 +250,7 @@ describe('Layer module', () => {
   it('send message from hook', (done) => {
 
     Vcr.insert('layer-send-hook-msg')
-    const layer = new Layer({token:'7R3ESPh1NGHciYiGladYRaBPlxWLTqeS2n8PlszSVR1TMN7F', appId: 'bec9d548-6265-11e5-9a48-0edffe00788f', sender: {id: 'test.bot', name: 'Fred'}, debug: internals.debug })
+    const layer = new Layer({token:'7R3ESPh1NGHciYiGladYRaBPlxWLTqeS2n8PlszSVR1TMN7F', appId: 'bec9d548-6265-11e5-9a48-0edffe00788f', sender: {id: 'test.bot', name: 'Fred'}, debug: internals.debug, messengerToken: internals.messengerToken})
 
     layer.then((layerInstance) => {
 
@@ -293,7 +293,7 @@ describe('Layer module', () => {
     }
 
     Vcr.insert('layer-send-postback-hook-msg')
-    const layer = new Layer({token:'7R3ESPh1NGHciYiGladYRaBPlxWLTqeS2n8PlszSVR1TMN7F', appId: 'bec9d548-6265-11e5-9a48-0edffe00788f', sender: {id: 'test.bot', name: 'Fred'}, debug: internals.debug })
+    const layer = new Layer({token:'7R3ESPh1NGHciYiGladYRaBPlxWLTqeS2n8PlszSVR1TMN7F', appId: 'bec9d548-6265-11e5-9a48-0edffe00788f', sender: {id: 'test.bot', name: 'Fred'}, debug: internals.debug, messengerToken: internals.messengerToken})
 
     layer.then((layerInstance) => {
 
@@ -337,7 +337,7 @@ describe('Layer module', () => {
     }
 
     Vcr.insert('layer-send-postback-hook-msg')
-    const layer = new Layer({token:'7R3ESPh1NGHciYiGladYRaBPlxWLTqeS2n8PlszSVR1TMN7F', appId: 'bec9d548-6265-11e5-9a48-0edffe00788f', sender: {id: 'test.bot', name: 'Fred'}, debug: internals.debug })
+    const layer = new Layer({token:'7R3ESPh1NGHciYiGladYRaBPlxWLTqeS2n8PlszSVR1TMN7F', appId: 'bec9d548-6265-11e5-9a48-0edffe00788f', sender: {id: 'test.bot', name: 'Fred'}, debug: internals.debug, messengerToken: internals.messengerToken })
 
     layer.then((layerInstance) => {
 
@@ -354,7 +354,7 @@ describe('Layer module', () => {
     }).catch(done)
   })
 
-    it('send message from hook without sender focus', (done) => {
+    it('send message from hook without sender', (done) => {
 
     let messengerPostbackHook = {
       'object':'page',
@@ -381,7 +381,7 @@ describe('Layer module', () => {
     }
 
     Vcr.insert('layer-send-postback-hook-msg-no-sender')
-      const layer = new Layer({token:'7R3ESPh1NGHciYiGladYRaBPlxWLTqeS2n8PlszSVR1TMN7F', appId: 'bec9d548-6265-11e5-9a48-0edffe00788f', debug: internals.debug })
+      const layer = new Layer({token:'7R3ESPh1NGHciYiGladYRaBPlxWLTqeS2n8PlszSVR1TMN7F', appId: 'bec9d548-6265-11e5-9a48-0edffe00788f', debug: internals.debug, messengerToken: internals.messengerToken })
 
     layer.then((layerInstance) => {
 
@@ -437,7 +437,7 @@ describe('Layer module', () => {
       ]
     }
 
-    const layer = new Layer({token:'7R3ESPh1NGHciYiGladYRaBPlxWLTqeS2n8PlszSVR1TMN7F', appId: 'bec9d548-6265-11e5-9a48-0edffe00788f', sender: {id: 'test.bot', name: 'Fred'}, debug: internals.debug })
+    const layer = new Layer({token:'7R3ESPh1NGHciYiGladYRaBPlxWLTqeS2n8PlszSVR1TMN7F', appId: 'bec9d548-6265-11e5-9a48-0edffe00788f', sender: {id: 'test.bot', name: 'Fred'}, debug: internals.debug, messengerToken: internals.messengerToken})
 
     layer.then((layerInstance) => {
 
