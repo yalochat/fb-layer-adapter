@@ -44,7 +44,7 @@ externals.createConversation = (conversation) => {
       if (err) {
         if (err.status === 409) {
           // Status code is 409 when conversations exists but its metadata has conflict
-          return resolve(_.merge(err.body.data, { statusCode: response.status }))
+          return resolve(_.merge(err.body.data, { statusCode: err.status }))
         }
 
         return reject(err)
