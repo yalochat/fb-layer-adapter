@@ -25,6 +25,7 @@
     "bucker": "^1.1.1",
     "catbox": "^7.1.1",
     "catbox-redis": "^1.0.10",
+    "confidence": "^3.0.1",
     "layer-api": "^2.3.1",
     "lodash": "^4.13.1",
     "valid-json-template": "^0.2.0",

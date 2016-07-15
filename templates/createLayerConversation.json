@@ -1,0 +1,19 @@
+{
+    "participants": "{{ participants }}",
+    "distinct": true,
+    "metadata": {
+        "type": "fb-conversation",
+        "state": "active",
+        "mode": "bot",
+        "user": {
+            "id": "{{ user.id }}",
+            "nickname": "{{ user.first_name }}",
+            "name": "{{ user.first_name }} {{ user.last_name }}",
+            "pic": "{{ user.profile_pic }}",
+            "gender": "{{ user.gender }}"
+        },
+        "store": {
+            "name":  "FB - {{ user.name }}"
+        }
+    }
+}
