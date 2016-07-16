@@ -13,7 +13,7 @@
             "gender": "{{ user.gender }}"
         },
         "store": {
-            "name":  "FB - {{ user.name }}"
+            "name":  "FB - {{ user.full_name }}"
         }
     }
 }
