@@ -6,7 +6,9 @@ const Messenger = require('../lib/messenger')
 const Vcr = require('vcrecorder')
 const Code = require('code')
 const Lab = require('lab')
-const Logger =  require('bucker').createLogger({console:true}, 'Messenger Test')
+const Logger =  require('bucker').createLogger({console:true}, 'test/messenger')
+
+const Cache = require('cache-redis')({ debug: true})
 
 var internals = {
   testTokenFacebook: 'EAAX6tDZBef9YBAF7MRhcYgPqFLswMAgDFCfce5ciiQHmAZBas3ZCIoT88OC1EovO22ZCBsdWSeTAmVVLNhoLIx3KxZC3lZAZC95cuZCyZChjkWMwin5KIWUYGpWsthRJrJLsku0vZBAbDRljO8x4H6zYa9AfXbnJfQXZAvIFsX1Abp10gZDZD'
@@ -21,7 +23,7 @@ const beforeEach = lab.beforeEach
 
 describe('Messenger module', () => {
 
-  beforeEach((done) => {
+  beforeEach(done => {
 
     internals.conversation = {
       'id': 'layer:///conversations/e67b5da2-95ca-40c4-bfc5-a2a8baaeb50f',
@@ -93,132 +95,113 @@ describe('Messenger module', () => {
     done()
   })
 
-  it('Load plugin without token', (done) => {
+  it('Load plugin without token', done => {
 
-    new Messenger({}).catch((e) => {
+    try {
+      const messenger = new Messenger({})
+    } catch (e) {
       expect(e.message).to.match(/token/i)
       done()
-    })
+    }
   })
 
-  it('load plugin with invalid token', (done) => {
+  it('load plugin with invalid token', done => {
 
-    const messenger = new Messenger({'token':'9dkd9dkd9d'})
-    messenger.then((messengerObject ) => {
-
-      expect(messengerObject).to.be.instanceof(Messenger)
-      done()
-
-    }, done)
+    const messenger = new Messenger({ token:'9dkd9dkd9d'})
+    expect(messenger).to.be.instanceof(Messenger)
+    done()
   })
 
-  it('sends text message', (done) => {
-
+  it('sends text message', done => {
     Vcr.insert('send-text-msg')
 
-    const promise = new Messenger({'token':internals.testTokenFacebook})
+    const messenger = new Messenger({ token: internals.testTokenFacebook })
 
-    promise.then((messenger) => {
-      return messenger.sendMessage('979330562174845', 'hello world', null)
-    }, done).then((response) => {
-
-      expect(response).to.be.an.object()
-      expect(response.recipient_id).to.be.string()
-      Vcr.eject((rec) =>  {
-        done()
-      })
-    }, done)
-  })
-
-  it('sends json message', (done) => {
-    Vcr.insert('send-json-msg')
-
-    let promise = new Messenger({'token':internals.testTokenFacebook})
-
-    promise.then((messenger) => {
-      messenger.sendMessage('979330562174845', '{"attachment":{"type":"image","payload":{"url": "https://node-os.com/images/nodejs.png"}}}', null).then((response) => {
-
+    messenger.sendMessage('979330562174845', 'hello world', null)
+      .then(response => {
         expect(response).to.be.an.object()
         expect(response.recipient_id).to.be.string()
         Vcr.eject((rec) =>  {
           done()
         })
       })
-    }, done)
+      .catch(error => {
+        console.log(error)
+      })
   })
 
-  it('unable to find conversation from hook', (done) =>{
+  it('sends json message', done => {
+    Vcr.insert('send-json-msg')
 
-    const promise = new Messenger({'token': internals.testTokenFacebook})
+    const messenger = new Messenger({token: internals.testTokenFacebook})
 
-    promise.then((messenger) => {
+    messenger.sendMessage('979330562174845', '{"attachment":{"type":"image","payload":{"url": "https://node-os.com/images/nodejs.png"}}}', null)
+      .then((response) => {
+        expect(response).to.be.an.object()
+        expect(response.recipient_id).to.be.string()
+        Vcr.eject((rec) =>  {
+          done()
+        })
+      })
+  })
 
-      internals.hook.message.conversation.id = null
-      const msg = messenger.sendTextFromHook(internals.hook)
+  it('unable to find conversation from hook', done =>{
 
-      msg.catch(error => {
+    Cache.start()
+      .then(cache => {
+        return new Messenger({token: internals.testTokenFacebook, cache})
+          .sendTextFromHook(internals.hook)
+      })
+      .catch(error => {
         expect(error).to.be.error()
         expect(error.message).to.match(/Unable to find conversation, message could not be send/i)
         done()
       })
-    }, done)
   })
 
-  it('ignore own message from hook', (done) =>{
+  it('ignore own message from hook', done =>{
+    internals.hook.message.sender.user_id = 'yoelfme'
 
-    const promise = new Messenger({'token': internals.testTokenFacebook})
-
-    promise.then((messenger) => {
-
-      internals.hook.message.sender.user_id = 'yoelfme'
-      return messenger.sendTextFromHook(internals.hook)
-
-    }, done)
-      .catch(error => {
-
-        expect(error).to.be.error()
-        expect(error.message).to.equals(`Ignoring message from ${internals.hook.message.sender.user_id}`)
-        done()
-      }, done)
-
+    new Messenger({token: internals.testTokenFacebook})
+      .sendTextFromHook(internals.hook)
+        .catch(error => {
+          expect(error).to.be.error()
+          expect(error.message).to.equals(`Ignoring message from ${internals.hook.message.sender.user_id}`)
+          done()
+        })
   })
 
-  it('send message from loaded conversation', (done) => {
+  it('send message from loaded conversation', done => {
 
     Vcr.insert('send-text-msg-loaded')
 
-    const promise = new Messenger({'token': internals.testTokenFacebook})
+    Cache.start()
+      .then(cache => {
+        const messenger = new Messenger({token: internals.testTokenFacebook, cache})
 
-    promise.then((messenger) => {
-
-      messenger.cache.storeSet(internals.conversation.id, internals.conversation).then((status) => {
-        return messenger.sendTextFromHook(internals.hook)
-      }, done).then((response) => {
-        Logger.warn(response)
-        expect(response).to.be.an.object()
-        expect(response.recipient_id).to.be.string()
-        Vcr.eject((rec) =>  {
-          done()
-        })
-      }, done)
-    }, done)
+        messenger.cache.set('conversations', internals.conversation.id, internals.conversation)
+          .then(status => messenger.sendTextFromHook(internals.hook))
+          .then(response => {
+            expect(response).to.be.an.object()
+            expect(response.recipient_id).to.be.string()
+            Vcr.eject((rec) =>  {
+              done()
+            })
+          })
+      })
   })
 
-  it('get user', (done) => {
+  it('get user, focus', done => {
 
     Vcr.insert('get-user-profile')
 
-    const promise = new Messenger({'token': internals.testTokenFacebook})
-
-    promise.then((messenger) => {
-
-      return messenger.getUser('979330562174845')
-    }, done).then((response) =>{
-
-      expect(response.gender).to.equals('male')
-      Vcr.eject((rec) =>  {
-        done()
-      })
-    }, done)
+    new Messenger({token: internals.testTokenFacebook})
+      .getUser('979330562174845')
+        .then(response => {
+          expect(response.gender).to.equals('male')
+          Vcr.eject((rec) =>  {
+            done()
+          })
+        })
   })
 })
