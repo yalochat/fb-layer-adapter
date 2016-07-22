@@ -1,6 +1,6 @@
 {
   "name": "fb-layer-adapter",
-  "version": "1.3.8",
+  "version": "2.0.0",
   "description": "A facebook & layer adapter",
   "main": "lib/index.js",
   "scripts": {
@@ -33,6 +33,7 @@
   },
   "devDependencies": {
     "babel-preset-es2015": "^6.9.0",
+    "cache-redis": "github:yalochat/cache-redis",
     "code": "^2.3.0",
     "dotenv": "^2.0.0",
     "gulp": "^3.9.1",
