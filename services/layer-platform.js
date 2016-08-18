@@ -72,6 +72,23 @@ externals.updateMetadata = (cid, metadata) => {
   })
 }
 
+externals.deleteMetadata = (cid, metadata) => {
+
+  Logger.info(`Removing metadata of conversation with id ${cid}`)
+
+  return new Promise((resolve, reject) => {
+
+    Layer.conversations.deleteMetadataProperties(cid, metadata, (err, res) => {
+
+      if (err) {
+        return reject(err)
+      }
+
+      return resolve(res)
+    })
+  })
+}
+
 externals.sendMessage = (cid, sender, message, contentType) => {
 
   let data = {
