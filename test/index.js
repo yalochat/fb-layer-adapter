@@ -26,7 +26,7 @@ describe('Index module', () => {
   })
 
   it('loads layer plugin', (done) => {
-    const Layer = new Adapter.Layer({ token: 'ABC123', appId: '1234', sender: {}, messengerToken: 'CBA321'})
+    const Layer = new Adapter.Layer({ token: 'ABC123', appId: '1234', sender: {}, messengerToken: 'CBA321', page: {}})
 
     expect(Layer).to.be.instanceOf(Adapter.Layer)
     done()
