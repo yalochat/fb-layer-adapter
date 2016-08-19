@@ -13,10 +13,10 @@
             "gender": "{{ user.gender }}"
         },
         "page": {
-            "id":  "{{ page.id }}",
-            "name":  "{{ page.name }}",
-            "email":  "{{ page.email }}",
-            "phone":  "{{ page.phone }}"
+            "id": "{{ page.id }}",
+            "name": "{{ page.name }}",
+            "phone": "{{ page.phone }}",
+            "email": "{{ page.email }}"
         }
     }
 }
