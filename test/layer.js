@@ -253,7 +253,7 @@ describe('Layer module', () => {
       })
   })
 
-  it('send message from hook, focus', done => {
+  it('send message from hook', done => {
 
     Cache.start()
       .then(cache => {
