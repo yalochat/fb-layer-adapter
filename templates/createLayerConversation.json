@@ -12,8 +12,11 @@
             "pic": "{{ user.profile_pic }}",
             "gender": "{{ user.gender }}"
         },
-        "store": {
-            "name":  "{{ user.full_name }}"
+        "page": {
+            "id": "{{ page.id }}",
+            "name": "{{ page.name }}",
+            "phone": "{{ page.phone }}",
+            "email": "{{ page.email }}"
         }
     }
 }
