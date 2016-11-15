@@ -1,6 +1,6 @@
 {
   "name": "fb-layer-adapter",
-  "version": "2.2.3",
+  "version": "2.2.4",
   "description": "A facebook & layer adapter",
   "main": "lib/index.js",
   "scripts": {
