@@ -1,0 +1,7 @@
+build:
+  image: node:5.10
+  commands:
+    - npm install
+    - npm test
+script:
+    - echo hello world

@@ -115,9 +115,9 @@ describe('Messenger module', () => {
   it('sends text message', done => {
     Vcr.insert('send-text-msg')
 
-    const messenger = new Messenger({ token: internals.testTokenFacebook })
+    const messenger = new Messenger({ token: 'EAAOsQSQvhL4BAOQ3L464jIlqtc6Qhlz0XvAhwkN4QpidJKBoOtJSfH7j4uCfzDcgK9YYxUtawNVXZCGXI3NW5eYLkIpjOXMdBZC5ZCCvaGprBj5J7d5bYjVEcWpAa6g71yWEDskgLKZAZA35mYKY1LqHO6eMyUHFXAFpMlAPEygZDZD' })
 
-    messenger.sendMessage('979330562174845', 'hello world', null)
+    messenger.sendMessage('1023365714452487', 'hello world', null)
       .then(response => {
         expect(response).to.be.an.object()
         expect(response.recipient_id).to.be.string()
@@ -125,24 +125,22 @@ describe('Messenger module', () => {
           done()
         })
       })
-      .catch(error => {
-        console.log(error)
-      })
+      .catch(done)
   })
 
   it('sends json message', done => {
     Vcr.insert('send-json-msg')
 
-    const messenger = new Messenger({token: internals.testTokenFacebook})
+    const messenger = new Messenger({token: 'EAAOsQSQvhL4BAOQ3L464jIlqtc6Qhlz0XvAhwkN4QpidJKBoOtJSfH7j4uCfzDcgK9YYxUtawNVXZCGXI3NW5eYLkIpjOXMdBZC5ZCCvaGprBj5J7d5bYjVEcWpAa6g71yWEDskgLKZAZA35mYKY1LqHO6eMyUHFXAFpMlAPEygZDZD'})
 
-    messenger.sendMessage('979330562174845', '{"attachment":{"type":"image","payload":{"url": "https://node-os.com/images/nodejs.png"}}}', null)
+    messenger.sendMessage('1023365714452487', '{"attachment":{"type":"image","payload":{"url": "https://node-os.com/images/nodejs.png"}}}', null)
       .then((response) => {
         expect(response).to.be.an.object()
         expect(response.recipient_id).to.be.string()
         Vcr.eject((rec) =>  {
           done()
         })
-      })
+      }).catch(done)
   })
 
   it('unable to find conversation from hook', done =>{
@@ -162,23 +160,24 @@ describe('Messenger module', () => {
   it('ignore own message from hook', done =>{
     internals.hook.message.sender.user_id = 'yoelfme'
 
-    new Messenger({token: internals.testTokenFacebook})
+    new Messenger({token: 'EAAOsQSQvhL4BAOQ3L464jIlqtc6Qhlz0XvAhwkN4QpidJKBoOtJSfH7j4uCfzDcgK9YYxUtawNVXZCGXI3NW5eYLkIpjOXMdBZC5ZCCvaGprBj5J7d5bYjVEcWpAa6g71yWEDskgLKZAZA35mYKY1LqHO6eMyUHFXAFpMlAPEygZDZD'})
       .sendTextFromHook(internals.hook)
-        .catch(error => {
+      .catch(error => {
+        console.error(error)
           expect(error).to.be.error()
-          expect(error.message).to.equals(`Ignoring message from ${internals.hook.message.sender.user_id}`)
+          expect(error.message).to.match(/yoel/i)
           done()
         })
   })
 
-  it('send message from loaded conversation', done => {
+  it('send message from loaded conversation fc', done => {
 
     Vcr.insert('send-text-msg-loaded')
 
     Cache.start()
       .then(cache => {
-        const messenger = new Messenger({token: internals.testTokenFacebook, cache})
-
+        const messenger = new Messenger({token: 'EAAOsQSQvhL4BAOQ3L464jIlqtc6Qhlz0XvAhwkN4QpidJKBoOtJSfH7j4uCfzDcgK9YYxUtawNVXZCGXI3NW5eYLkIpjOXMdBZC5ZCCvaGprBj5J7d5bYjVEcWpAa6g71yWEDskgLKZAZA35mYKY1LqHO6eMyUHFXAFpMlAPEygZDZD', cache})
+        internals.conversation.metadata.user.id = 1023365714452487
         messenger.cache.set('conversations', internals.conversation.id, internals.conversation)
           .then(status => messenger.sendTextFromHook(internals.hook))
           .then(response => {
@@ -191,7 +190,7 @@ describe('Messenger module', () => {
       })
   })
 
-  it('get user, focus', done => {
+  it('get user', done => {
 
     Vcr.insert('get-user-profile')
 

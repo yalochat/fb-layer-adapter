@@ -190,13 +190,13 @@ describe('Layer module', () => {
       .then(cache => {
         Vcr.insert('layer-send-text-msg')
 
-        const layer = new Layer({token:'7R3ESPh1NGHciYiGladYRaBPlxWLTqeS2n8PlszSVR1TMN7F', appId: 'bec9d548-6265-11e5-9a48-0edffe00788f', sender: {id: 'test.bot', name: 'Fred'}, debug: internals.debug, messengerToken, cache, page})
-        return layer.sendText('979330562174845', 'hola mundo')
+        const layer = new Layer({token:'7R3ESPh1NGHciYiGladYRaBPlxWLTqeS2n8PlszSVR1TMN7F', appId: 'bec9d548-6265-11e5-9a48-0edffe00788f', sender: {id: 'test.bot.1', name: 'Fred'}, debug: internals.debug, messengerToken, cache, page})
+        return layer.sendText('979330562174845', 'hola mundo', null, '979330562174841')
       })
       .then((result) => {
 
         expect(result.id).to.exist()
-        expect(result.sender.user_id).equals('test.bot')
+        expect(result.sender.user_id).equals('test.bot.1')
         Vcr.eject((rec) =>  {
           done()
         })
@@ -235,7 +235,7 @@ describe('Layer module', () => {
   })
 
 
-  it('send message from hook', done => {
+  it('send message from hook fc', done => {
     Cache.start()
       .then(cache => {
         Vcr.insert('layer-send-hook-msg')
@@ -291,7 +291,7 @@ describe('Layer module', () => {
         Vcr.eject((rec) =>  {
           done()
         })
-      })
+      }).catch(done)
   })
 
 
