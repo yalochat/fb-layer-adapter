@@ -1,5 +1,5 @@
 {
-  "name": "fb-layer-adapter",
+  "name": "@engyalo/fb-layer-adapter",
   "version": "2.2.6",
   "description": "A facebook & layer adapter",
   "main": "lib/index.js",
